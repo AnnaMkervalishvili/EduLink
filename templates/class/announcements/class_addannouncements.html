@@ -1,0 +1,23 @@
+{% extends "base/base_ofAll.html" %}
+{%block page_content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">Add Announcement 📢</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label class="form-label fw-bold">Name <span class="text-danger">*</span></label>
+      <input type="text" name="name" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Text</label>
+      <textarea name="text" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="text-end">
+      <button type="submit" class="btn btn-success">✅ Done</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

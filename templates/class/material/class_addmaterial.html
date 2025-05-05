@@ -1,0 +1,31 @@
+{% extends "base/base_class.html" %}
+{% block class_content %}
+
+    <div class="container">
+      <h2 class="text-center mb-4">Add Material 📚</h2>
+
+      <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Name <span class="text-danger">*</span></label>
+          <input type="text" name="name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Text</label>
+          <textarea name="text" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Upload File <span class="text-danger">*</span></label>
+          <input type="file" name="file" class="form-control" required>
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-success">✅ Done</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

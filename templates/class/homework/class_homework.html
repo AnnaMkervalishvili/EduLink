@@ -1,0 +1,29 @@
+{% extends "base/base_class.html" %}
+{% block class_content %}
+ <div class="col-md-9 col-lg-10 py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">Homeworks 📝</h2>
+
+      <div class="d-flex justify-content-end mb-3">
+        <a href="{{ url_for('add_homework', class_id=class_info.id) }}" class="btn btn-success">➕ Add Homework</a>
+        <a href="{{ url_for('passed_homeworks', class_id=class_info.id) }}" class="btn btn-secondary ms-2">📅 View Passed</a>
+      </div>
+
+      <ul class="list-group">
+        {% for hw in homeworks %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{{ url_for('view_homework', homework_id=hw.id) }}">{{ hw.name }}</a>
+            <small>(Deadline: {{ hw.deadline.strftime('%Y-%m-%d %H:%M') }})</small>
+         <form method="POST" action="{{ url_for('delete_homework', homework_id=hw.id) }}" onsubmit="return confirm('Are you sure you want to delete this homework?');">
+        <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
+      </form>
+          </li>
+        {% else %}
+          <li class="list-group-item">No upcoming homeworks.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

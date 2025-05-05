@@ -1,0 +1,38 @@
+{% extends "base/base_ofAll.html" %}
+{% block page_content %}
+
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3 col-lg-2 bg-dark sidebar py-4 text-white min-vh-100 d-flex flex-column justify-content-between">
+
+    <div>
+      <h5 class="text-center mb-4">Menu</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a class="nav-link text-white" href="{{ url_for('class_dashboard', class_id=class_info.id) }}">📄 About</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white" href="#">👨‍🎓 Students</a></li>
+
+        <li class="nav-item mb-2">
+  <a class="nav-link text-white" href="{{ url_for('materials', class_id=class_info.id) }}">📚 Materials</a>
+</li>
+
+        <li class="nav-item mb-2">
+          <a class="nav-link text-white" href="{{ url_for('homeworks', class_id=class_info.id) }}">📝 Homeworks</a></li>
+
+           <li class="nav-item mb-2">
+  <a class="nav-link text-white" href="{{ url_for('announcements', class_id=class_info.id) }}">📢 Announcements </a>
+</li>
+
+      </ul>
+
+    </div>
+
+    <div class="text-center mb-3">
+      <a href="{{ url_for('instructor') }}" class="btn btn-outline-light">← Back</a>
+    </div>
+  </div>
+    <div class="col-md-9 col-lg-10 py-4">
+    {% block class_content %}
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}

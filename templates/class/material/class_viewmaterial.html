@@ -1,0 +1,43 @@
+{% extends "base/base_class.html" %}
+{% block class_content %}
+
+
+<div class="container py-5">
+  <h2 class="text-center mb-4">Edit Material: {{ material.name }}</h2>
+
+  <form method="POST" action="{{ url_for('edit_material', material_id=material.id) }}" enctype="multipart/form-data">
+    <div class="card p-4">
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">Material Name</label>
+        <input type="text" name="name" class="form-control" value="{{ material.name }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">Text</label>
+        <textarea name="text" class="form-control" rows="4">{{ material.text }}</textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">Replace File (optional)</label>
+        {% if material.filename %}
+          <p>Current File:
+            <a href="{{ url_for('static', filename='uploads/materials/' + material.filename) }}" target="_blank">
+              {{ material.filename }}
+            </a>
+          </p>
+        {% endif %}
+        <input type="file" name="file" class="form-control">
+      </div>
+
+      <div class="text-end">
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{{ url_for('materials', class_id=material.class_id) }}" class="btn btn-secondary">Cancel</a>
+      </div>
+   <p><strong>Created at:</strong> {{ material.created_at_tbilisi.strftime('%Y-%m-%d %H:%M') }}</p>
+          <p><strong>Updated at:</strong> {{ material.updated_at_tbilisi.strftime('%Y-%m-%d %H:%M') }}</p>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

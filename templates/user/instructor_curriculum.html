@@ -1,0 +1,85 @@
+{% extends "base/base_instructor.html" %}
+{% block inst_content %}
+
+<style>
+  .timetable {
+    display: grid;
+    grid-template-columns: 100px repeat(7, 1fr); /* Y-axis (time) + 7 days */
+    grid-auto-rows: 60px; /* Taller rows */
+    border: 1px solid #dee2e6;
+  }
+
+  .timetable > div {
+    border: 1px solid #dee2e6;
+    padding: 4px;
+    font-size: 0.85rem;
+  }
+
+  .header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .time-label {
+    background-color: #f1f3f5;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .class-block {
+    background-color: #cfe2ff;
+    border-left: 5px solid #0d6efd;
+    padding: 4px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .homework-block {
+    background-color: #f8d7da;
+    border-left: 5px solid #dc3545;
+    padding: 4px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+</style>
+
+<div class="container py-4">
+  <h2 class="text-center mb-4">Weekly Curriculum 📚</h2>
+
+  {% set days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+  {% set hours = range(8, 21) %} {# 8 AM to 8 PM #}
+
+  <div class="timetable">
+    <!-- Header row -->
+    <div></div>
+    {% for day in days %}
+      <div class="header">{{ day }}</div>
+    {% endfor %}
+
+    {% for hour in hours %}
+      <!-- Time column -->
+      <div class="time-label">
+        {{ (hour % 12) if (hour % 12) != 0 else 12 }}:00 {{ 'AM' if hour < 12 else 'PM' }}
+      </div>
+
+      {% for day_index in range(7) %}
+        <div>
+          {% for c in schedule[day_index].classes %}
+            {% if c.start_time.hour == hour %}
+              <div class="class-block">
+                {{ c.name }}<br>
+                <small>
+                  {{ c.start_time.strftime('%I:%M %p') }} -
+                  {{ (c.start_time.hour + (c.duration // 60)) % 24 }}:{{ '%02d' % ((c.start_time.minute + c.duration) % 60) }}
+                </small>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

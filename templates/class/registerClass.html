@@ -1,0 +1,61 @@
+{% extends "base/base_ofAll.html" %}
+{%block page_content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Register New Class</h2>
+
+  <form method="POST" action="{{ url_for('register_class') }}">
+    <div class="mb-3">
+      <label class="form-label fw-bold">Class Name <span class="text-danger">*</span></label>
+      <input type="text" name="name" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Subject <span class="text-danger">*</span></label>
+      <input type="text" name="subject" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+  <label class="form-label fw-bold">Day <span class="text-danger">*</span></label>
+  <select name="day" class="form-select" required>
+    <option value="">Select a day</option>
+    <option value="Monday">Monday</option>
+    <option value="Tuesday">Tuesday</option>
+    <option value="Wednesday">Wednesday</option>
+    <option value="Thursday">Thursday</option>
+    <option value="Friday">Friday</option>
+    <option value="Saturday">Saturday</option>
+    <option value="Sunday">Sunday</option>
+  </select>
+</div>
+
+<div class="mb-3">
+  <label class="form-label fw-bold">Start Time <span class="text-danger">*</span></label>
+  <div class="d-flex gap-2">
+    <input type="number" name="start_hour" class="form-control" placeholder="Hour (0–23)" min="0" max="23" required>
+    <input type="number" name="start_minute" class="form-control" placeholder="Minute (0–59)" min="0" max="59" required>
+  </div>
+</div>
+
+
+
+
+
+<div class="mb-3">
+  <label class="form-label fw-bold">Duration (in minutes) <span class="text-danger">*</span></label>
+  <input type="number" name="duration" class="form-control" min="1" required>
+</div>
+
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Instructor</label>
+      <input type="text" name="instructor" class="form-control" value="{{ current_user.name }}" readonly>
+    </div>
+
+    <div class="text-end">
+      <button type="submit" class="btn btn-success">Create Class</button>
+    </div>
+  </form>
+</div>
+
+
+{% endblock %}

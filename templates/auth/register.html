@@ -1,0 +1,131 @@
+<!--these messages dont work correctly!!!!!!!!!-->
+
+
+<!--these messages dont work correctly!!!!!!!!!-->
+
+
+
+
+
+
+
+{% extends "base/base_auth.html" %}
+{% block auth_content %}
+<h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registration </h3>
+            <form method="POST" action="{{ url_for('register') }}">
+
+
+              <div class="row">
+                <div class="col-md-6 mb-4">
+
+                  <div data-mdb-input-init class="form-outline">
+                  <input type="text" id="firstName" name="name" class="form-control form-control-lg" required />
+
+                    <label class="form-label" for="firstName">First Name<span style="color: red;">*</span></label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+                  <div data-mdb-input-init class="form-outline">
+                   <input type="text" id="lastName" name="lastname" class="form-control form-control-lg" required />
+
+                    <label class="form-label" for="lastName">Last Name<span style="color: red;">*</span></label>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                   <div data-mdb-input-init class="form-outline">
+                    <input type="tel"
+       id="phoneNumber"
+       name="phonenumber"
+       class="form-control form-control-lg"
+       pattern="\d{9}"
+       title="Phone number must have exactly 9 digits "
+       inputmode="numeric"
+       placeholder="(+995)"
+       onfocus="addCountryCode(this)" />
+
+
+
+
+                    <label class="form-label" for="phoneNumber">Phone Number</label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+                <h6 class="mb-2 pb-1">Gender:</h6>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="gender" id="femaleGender" value="Female" required />
+  <label class="form-check-label" for="femaleGender">Female</label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="gender" id="maleGender" value="Male" />
+  <label class="form-check-label" for="maleGender">Male</label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="gender" id="otherGender" value="Other" />
+  <label class="form-check-label" for="otherGender">Other</label>
+</div>
+
+
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+
+                  <div data-mdb-input-init class="form-outline">
+                  <input type="email" id="emailAddress" name="email" class="form-control form-control-lg" required />
+
+                    <label class="form-label" for="emailAddress">Email<span style="color: red;">*</span></label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4 pb-2">
+
+
+                    <div data-mdb-input-init class="form-outline datepicker w-100">
+                    <input type="password" name="password" class="form-control form-control-lg" id="password" required minlength="5" />
+
+                    <label for="Password" class="form-label"> password<span style="color: red;">*</span></label>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+
+                  <select class="select form-control-lg">
+                    <option value="1" disabled>Choose option</option>
+                    <option value="2">Instructor</option>
+<!--                    <option value="3">Student</option>-->
+<!--                    <option value="4">Administrator</option>-->
+                  </select>
+                  <label class="form-label select-label">Choose Your Role</label>
+
+                </div>
+              </div>
+
+              <div class="mt-4 pt-2">
+
+                <button type="submit" class="btn btn-outline-light btn-lg">Submit</button>
+
+
+              </div>
+
+            </form>
+
+
+
+{%endblock%}

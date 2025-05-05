@@ -1,0 +1,32 @@
+
+{% extends "base/base_class.html" %}
+{% block class_content %}
+ <div class="col-md-9 col-lg-10 py-5">
+    <div class="container">
+       <h2 class="text-center mb-4">Announcements 📢</h2>
+
+
+      <div class="d-flex justify-content-end mb-3">
+        <a href="{{ url_for('addannouncement', class_id=class_info.id) }}" class="btn btn-success">➕ Add Announcement</a>
+              </div>
+
+      <ul class="list-group">
+  {% for an in announcement %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <a href="{{ url_for('view_announcement', announcement_id=an.id) }}">{{ an.name }}</a>
+
+      <form method="POST" action="{{ url_for('delete_announcement', announcement_id=an.id) }}" onsubmit="return confirm('Are you sure you want to delete this announcement?');">
+        <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
+      </form>
+    </li>
+  {% else %}
+    <li class="list-group-item">No Announcements.</li>
+  {% endfor %}
+</ul>
+
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
