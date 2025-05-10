@@ -1,61 +1,72 @@
 {% extends "base/base_ofAll.html" %}
-{%block page_content %}
+{% block page_content %}
 <div class="container mt-5">
   <h2 class="text-center mb-4">Register New Class</h2>
 
-  <form method="POST" action="{{ url_for('register_class') }}">
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <!-- Class Name -->
     <div class="mb-3">
-      <label class="form-label fw-bold">Class Name <span class="text-danger">*</span></label>
-      <input type="text" name="name" class="form-control" required>
+      {{ form.name.label(class="form-label fw-bold") }}
+      {{ form.name(class="form-control") }}
+      {% if form.name.errors %}
+        <div class="text-danger">{{ form.name.errors[0] }}</div>
+      {% endif %}
     </div>
 
+    <!-- Subject -->
     <div class="mb-3">
-      <label class="form-label fw-bold">Subject <span class="text-danger">*</span></label>
-      <input type="text" name="subject" class="form-control" required>
+      {{ form.subject.label(class="form-label fw-bold") }}
+      {{ form.subject(class="form-control") }}
+      {% if form.subject.errors %}
+        <div class="text-danger">{{ form.subject.errors[0] }}</div>
+      {% endif %}
     </div>
 
+    <!-- Day -->
     <div class="mb-3">
-  <label class="form-label fw-bold">Day <span class="text-danger">*</span></label>
-  <select name="day" class="form-select" required>
-    <option value="">Select a day</option>
-    <option value="Monday">Monday</option>
-    <option value="Tuesday">Tuesday</option>
-    <option value="Wednesday">Wednesday</option>
-    <option value="Thursday">Thursday</option>
-    <option value="Friday">Friday</option>
-    <option value="Saturday">Saturday</option>
-    <option value="Sunday">Sunday</option>
-  </select>
-</div>
+      {{ form.day.label(class="form-label fw-bold") }}
+      {{ form.day(class="form-select") }}
+      {% if form.day.errors %}
+        <div class="text-danger">{{ form.day.errors[0] }}</div>
+      {% endif %}
+    </div>
 
-<div class="mb-3">
-  <label class="form-label fw-bold">Start Time <span class="text-danger">*</span></label>
-  <div class="d-flex gap-2">
-    <input type="number" name="start_hour" class="form-control" placeholder="Hour (0–23)" min="0" max="23" required>
-    <input type="number" name="start_minute" class="form-control" placeholder="Minute (0–59)" min="0" max="59" required>
-  </div>
-</div>
+    <!-- Start Time -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Start Time <span class="text-danger">*</span></label>
+      <div class="d-flex gap-2">
+        {{ form.start_hour(class="form-control", placeholder="Hour (8–20)") }}
+        {{ form.start_minute(class="form-control", placeholder="Minute (0–59)") }}
+      </div>
+      {% if form.start_hour.errors %}
+        <div class="text-danger">{{ form.start_hour.errors[0] }}</div>
+      {% endif %}
+      {% if form.start_minute.errors %}
+        <div class="text-danger">{{ form.start_minute.errors[0] }}</div>
+      {% endif %}
+    </div>
 
+    <!-- Duration -->
+    <div class="mb-3">
+      {{ form.duration.label(class="form-label fw-bold") }}
+      {{ form.duration(class="form-control") }}
+      {% if form.duration.errors %}
+        <div class="text-danger">{{ form.duration.errors[0] }}</div>
+      {% endif %}
+    </div>
 
-
-
-
-<div class="mb-3">
-  <label class="form-label fw-bold">Duration (in minutes) <span class="text-danger">*</span></label>
-  <input type="number" name="duration" class="form-control" min="1" required>
-</div>
-
-
+    <!-- Instructor Info (read-only) -->
     <div class="mb-3">
       <label class="form-label fw-bold">Instructor</label>
-      <input type="text" name="instructor" class="form-control" value="{{ current_user.name }}" readonly>
+      <input type="text" class="form-control" value="{{ current_user.name }}" readonly>
     </div>
 
+    <!-- Submit -->
     <div class="text-end">
-      <button type="submit" class="btn btn-success">Create Class</button>
+      {{ form.submit(class="btn btn-success") }}
     </div>
   </form>
 </div>
-
-
 {% endblock %}

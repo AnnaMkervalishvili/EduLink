@@ -4,32 +4,22 @@
 <div class="container py-5">
   <h2 class="text-center mb-4">Edit Announcement</h2>
 
-  <form method="POST" action="{{ url_for('edit_announcement', announcement_id=announcement.id) }}">
+
+
     <div class="card p-4">
 
-      <div class="mb-3">
-        <label for="name" class="form-label">Title:</label>
-        <input type="text" id="name" name="name" class="form-control" value="{{ announcement.name }}">
-      </div>
 
-      <div class="mb-3">
-        <label for="text" class="form-label">Text:</label>
-        <textarea id="text" name="text" class="form-control" rows="5">{{ announcement.text }}</textarea>
-      </div>
-
-      <div class="mt-4 d-flex justify-content-end gap-2">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a href="{{ url_for('announcements', class_id=announcement.class_id) }}" class="btn btn-secondary">
-          Cancel
-        </a>
-
-      </div>
-
+      <h4>{{announcement.name}}</h4>
+      <p>{{ announcement.text}}</p>
       <hr>
-      <p><strong>Created at:</strong> {{ announcement.created_at_tbilisi.strftime('%Y-%m-%d %H:%M') }}</p>
-      <p><strong>Updated at:</strong> {{ announcement.updated_at_tbilisi.strftime('%Y-%m-%d %H:%M') }}</p>
+        <p><strong>Created at:</strong>{{to_tbilisi(announcement.created_at).strftime('%y-%m-%d %H:%M')}}</p>
+        <p><strong>Updated at:</strong>{{to_tbilisi(announcement.updated_at).strftime('%y-%m-%d %H:%M')}}</p>
+
+      <div class="text-end mt-3">
+           <a href="{{url_for('edit_announcement' , announcement_id=announcement.id) }}" class="btn btn-warning">✏️ Edit</a>
+           <a href="{{ url_for('announcements', class_id=announcement.class_id) }}" class="btn btn-secondary">← Back</a>
     </div>
-  </form>
+  </div>
 </div>
 
 {% endblock %}

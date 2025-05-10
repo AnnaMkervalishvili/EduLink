@@ -1,0 +1,75 @@
+{% extends "base/base_class.html" %}
+{% block class_content %}
+
+<div class="container py-5">
+  <h2 class="text-center mb-4">✏️ Edit Homework</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <div class="card p-4">
+
+      <!-- Name -->
+      <div class="mb-3">
+        {{ form.name.label(class="form-label fw-bold") }}
+        {{ form.name(class="form-control") }}
+        <small class="text-muted">Current: "{{ homework.name }}"</small>
+        {% if form.name.errors %}
+          <div class="text-danger">{{ form.name.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Text -->
+      <div class="mb-3">
+        {{ form.text.label(class="form-label fw-bold") }}
+        {{ form.text(class="form-control", rows=4) }}
+        <small class="text-muted">Current: "{{ homework.text or 'No text' }}"</small>
+        {% if form.text.errors %}
+          <div class="text-danger">{{ form.text.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Deadline -->
+<div class="mb-3">
+  {{ form.deadline.label(class="form-label fw-bold") }}
+  {{ form.deadline(class="form-control", type="datetime-local", min="2024-01-01T00:00", max="2099-12-31T23:59", placeholder="YYYY-MM-DDTHH:MM") }}
+  <small class="text-muted">Current: {{ to_tbilisi(homework.deadline).strftime('%Y-%m-%d %H:%M') }}</small>
+  <small class="form-text text-muted">Format: YYYY-MM-DDTHH:MM</small>
+  {% if form.deadline.errors %}
+    <div class="text-danger">{{ form.deadline.errors[0] }}</div>
+  {% endif %}
+</div>
+
+
+      <!-- File Upload -->
+      <div class="mb-3">
+        {{ form.file.label(class="form-label fw-bold") }}
+        {% if homework.filename %}
+  <p><strong>File:</strong>
+    <a href="{{ url_for('download_homework', class_id=homework.class_id, filename=homework.filename) }}" target="_blank">
+      {{ homework.filename }}
+    </a>
+  </p>
+{% endif %}
+        {{ form.file(class="form-control") }}
+        {% if form.file.errors %}
+          <div class="text-danger">{{ form.file.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+
+
+      <!-- Submit/Cancel Buttons -->
+      <div class="text-end d-flex justify-content-end gap-2 mt-3">
+        {{ form.submit(class="btn btn-success") }}
+        <a href="{{ url_for('view_homework', homework_id=homework.id) }}" class="btn btn-secondary">Cancel</a>
+      </div>
+
+      <hr>
+
+
+    </div>
+  </form>
+</div>
+
+{% endblock %}

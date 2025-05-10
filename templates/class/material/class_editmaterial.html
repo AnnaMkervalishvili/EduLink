@@ -1,0 +1,60 @@
+{% extends "base/base_class.html" %}
+{% block class_content %}
+
+<div class="container py-5">
+  <h2 class="text-center mb-4">✏️ Edit Material</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <div class="card p-4">
+
+      <!-- Name Field -->
+      <div class="mb-3">
+        {{ form.name.label(class="form-label fw-bold") }}
+        {{ form.name(class="form-control") }}
+        <small class="text-muted">Current: "{{ material.name }}"</small>
+        {% if form.name.errors %}
+          <div class="text-danger">{{ form.name.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Text Field -->
+      <div class="mb-3">
+        {{ form.text.label(class="form-label fw-bold") }}
+        {{ form.text(class="form-control", rows=4) }}
+        <small class="text-muted">Current: "{{ material.text or 'No text' }}"</small>
+        {% if form.text.errors %}
+          <div class="text-danger">{{ form.text.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <!-- File Field -->
+      <div class="mb-3">
+        {{ form.file.label(class="form-label fw-bold") }}
+        {% if material.filename %}
+  <p><strong>File:</strong>
+    <a href="{{ url_for('download_material', class_id=material.class_id, filename=material.filename) }}" target="_blank">
+      {{ material.filename }}
+    </a>
+  </p>
+{% endif %}
+        {{ form.file(class="form-control") }}
+        {% if form.file.errors %}
+          <div class="text-danger">{{ form.file.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="text-end mt-4 d-flex justify-content-end gap-2">
+        {{ form.submit(class="btn btn-success") }}
+        <a href="{{ url_for('view_material', material_id=material.id) }}" class="btn btn-secondary">Cancel</a>
+      </div>
+
+      <hr>
+
+    </div>
+  </form>
+</div>
+
+{% endblock %}

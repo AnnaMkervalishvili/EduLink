@@ -1,34 +1,35 @@
-<!--these messages dont work correctly!!!!!!!!!-->
-
-
-<!--these messages dont work correctly!!!!!!!!!-->
-
-
-
 {% extends "base/base_auth.html" %}
 {% block auth_content %}
 
 <form method="POST" action="{{ url_for('login') }}">
-              <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-              <p class="text-white-50 mb-5">Please enter your email and password!</p>
-              <div data-mdb-input-init class="form-outline form-white mb-4">
-                <input type="email" id="typeEmailX" name="email" class="form-control form-control-lg" />
+  {{ form.hidden_tag() }}
 
-                <label class="form-label" for="typeEmailX">Email</label>
-              </div>
-              <div data-mdb-input-init class="form-outline form-white mb-4">
-                <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg" />
-                <label class="form-label" for="typePasswordX">Password</label>
-              </div>
+  <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+  <p class="text-white-50 mb-5">Please enter your email and password!</p>
 
-              <button data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+  <div data-mdb-input-init class="form-outline form-white mb-4">
+    {{ form.email(class="form-control form-control-lg", id="typeEmailX") }}
+    {{ form.email.label(class="form-label", for="typeEmailX") }}
+    {% if form.email.errors %}
+      <div class="text-danger">{{ form.email.errors[0] }}</div>
+    {% endif %}
+  </div>
 
-            <div>
-              <p class="mb-0">Don't have an account? <a href="{{url_for('register') }}" class="text-white-50 fw-bold">Register</a>
-              </p>
-            </div>
+  <div data-mdb-input-init class="form-outline form-white mb-4">
+    {{ form.password(class="form-control form-control-lg", id="typePasswordX") }}
+    {{ form.password.label(class="form-label", for="typePasswordX") }}
+    {% if form.password.errors %}
+      <div class="text-danger">{{ form.password.errors[0] }}</div>
+    {% endif %}
+  </div>
 
+  {{ form.submit(class="btn btn-outline-light btn-lg px-5") }}
 
+  <div>
+    <p class="mb-0">Don't have an account?
+      <a href="{{ url_for('register') }}" class="text-white-50 fw-bold">Register</a>
+    </p>
+  </div>
 </form>
 
-{%endblock%}
+{% endblock %}

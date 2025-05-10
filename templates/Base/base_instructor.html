@@ -6,7 +6,16 @@
   <!-- Sidebar (dark) -->
   <div class="col-md-3 col-lg-2 bg-dark sidebar py-4 text-center text-white min-vh-100">
    <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto;">
-  <img src="{{ url_for('static', filename='uploads/profile_pics/' + user.profile_image) if user.profile_image else url_for('static', filename='uploads/profile_pics/profile_placeholder.png') }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+     <img
+  src="{{
+    url_for('static', filename='uploads/instructors/{}/profile_pics/{}'.format(user.id, user.profile_image))
+    if user.profile_image and user.profile_image != 'profile_placeholder.png'
+    else url_for('static', filename='uploads/profile_pics/profile_placeholder.png')
+  }}"
+  alt="Profile"
+  style="width: 100%; height: 100%; object-fit: cover;">
+
+
 </div>
     <h5 class="mt-3">{{ name }}</h5>
     <ul class="nav flex-column mt-4">
@@ -20,10 +29,19 @@
         <a class="nav-link text-white" href="{{ url_for('about_instructor') }}">ℹ️ About</a>
       </li>
 
+
+
+      <li class="nav-item mt-3">
+  <a class="nav-link text-danger" href="{{ url_for('delete_instructor') }}"
+     onclick="return confirm('Are you sure you want to permanently delete your account and all your classes?');">
+    🗑️ Delete Account
+  </a>
+</li>
+
     </ul>
   </div>
 
-  <!-- Main Content (white) -->
+
   <div class="col-md-9 col-lg-10 py-4">
     {% block inst_content %}
     {% endblock %}

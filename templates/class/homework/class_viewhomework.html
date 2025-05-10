@@ -2,42 +2,31 @@
 {% block class_content %}
 
 <div class="container py-5">
-  <h2 class="text-center mb-4">Edit Homework: {{ homework.name }}</h2>
+  <h2 class="text-center mb-4">📘 Homework Details</h2>
 
-  <form method="POST" action="{{ url_for('edit_homework', homework_id=homework.id) }}" enctype="multipart/form-data">
-    <div class="card p-4">
+  <div class="card p-4">
+    <h4 class="fw-bold">{{ homework.name }}</h4>
+    <p>{{ homework.text or "No description provided." }}</p>
 
-      <div class="mb-3">
-        <label class="form-label fw-bold">Homework Name</label>
-        <input type="text" name="name" class="form-control" value="{{ homework.name }}" required>
-      </div>
+    <p><strong>Deadline:</strong> {{ to_tbilisi(homework.deadline).strftime('%Y-%m-%d %H:%M') }}</p>
 
-      <div class="mb-3">
-        <label class="form-label fw-bold">Text</label>
-        <textarea name="text" class="form-control" rows="4">{{ homework.text }}</textarea>
-      </div>
+    {% if homework.filename %}
+  <p><strong>File:</strong>
+    <a href="{{ url_for('download_homework', class_id=homework.class_id, filename=homework.filename) }}" target="_blank">
+      {{ homework.filename }}
+    </a>
+  </p>
+{% endif %}
 
-      <div class="mb-3">
-        <label class="form-label fw-bold">Deadline</label>
-        <input type="datetime-local" name="deadline" class="form-control"
-               value="{{ homework.deadline.strftime('%Y-%m-%dT%H:%M') }}" required max="9999-12-31T23:59">
-      </div>
+    <hr>
+    <p><strong>Created at:</strong> {{ to_tbilisi(homework.created_at).strftime('%Y-%m-%d %H:%M') }}</p>
+    <p><strong>Updated at:</strong> {{ to_tbilisi(homework.updated_at).strftime('%Y-%m-%d %H:%M') }}</p>
 
-      <div class="mb-3">
-        <label class="form-label fw-bold">Replace File (optional)</label>
-        {% if homework.filename %}
-          <p>Current: <a href="{{ url_for('static', filename='uploads/homeworks/' + homework.filename) }}" target="_blank">{{ homework.filename }}</a></p>
-        {% endif %}
-        <input type="file" name="file" class="form-control">
-      </div>
-
-      <div class="text-end">
-        <button type="submit" class="btn btn-success">Save Changes</button>
-        <a href="{{ url_for('homeworks', class_id=homework.class_id) }}" class="btn btn-secondary">Cancel</a>
-      </div>
-    <p><strong>Created at:</strong> {{ homework.created_at_tbilisi.strftime('%Y-%m-%d %H:%M') }}</p>
-          <p><strong>Updated at:</strong> {{ homework.updated_at_tbilisi.strftime('%Y-%m-%d %H:%M') }}</p>
+    <div class="text-end mt-3">
+      <a href="{{ url_for('edit_homework', homework_id=homework.id) }}" class="btn btn-warning">✏️ Edit</a>
+      <a href="{{ url_for('homeworks', class_id=class_info.id) }}" class="btn btn-secondary">← Back</a>
     </div>
-  </form>
+  </div>
 </div>
+
 {% endblock %}

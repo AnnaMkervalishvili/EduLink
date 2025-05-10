@@ -1,62 +1,27 @@
 {% extends "base/base_class.html" %}
-
 {% block class_content %}
 
-
 <div class="container py-5">
-    <h2 class="text-center mb-4">Edit Class: {{ class_info.name }}</h2>
+  <h2 class="text-center mb-4">📘 Class Info</h2>
 
-    <form method="POST" action="{{ url_for('edit_class', class_id=class_info.id) }}">
-        <div class="card p-4">
+  <div class="card p-4">
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Class Name</label>
-                <input type="text" name="name" class="form-control" value="{{ class_info.name }}" required>
-            </div>
+    <p><strong>Name:</strong> {{ class_info.name }}</p>
+    <p><strong>Subject:</strong> {{ class_info.subject }}</p>
+    <p><strong>Day:</strong> {{ class_info.day }}</p>
+    <p><strong>Start Time:</strong> {{ class_info.start_time.strftime('%H:%M') }}</p>
+    <p><strong>Duration:</strong> {{ class_info.duration }} minutes</p>
+    <p><strong>Instructor:</strong> {{ class_info.instructor.name }}</p>
+    <p><strong>Class Key:</strong> {{ class_info.key }}</p>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Subject</label>
-                <input type="text" name="subject" class="form-control" value="{{ class_info.subject }}" required>
-            </div>
+    <hr>
+    <p><strong>Created at:</strong> {{ to_tbilisi(class_info.created_at).strftime('%Y-%m-%d %H:%M') }}</p>
+    <p><strong>Updated at:</strong> {{ to_tbilisi(class_info.updated_at).strftime('%Y-%m-%d %H:%M') }}</p>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Day</label>
-                <select name="day" class="form-select" required>
-                    {% for d in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
-                        <option value="{{ d }}" {% if class_info.day == d %}selected{% endif %}>{{ d }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold">Start Time</label>
-                <input type="time" name="start_time" class="form-control"
-                       value="{{ class_info.start_time.strftime('%H:%M') }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold">Duration (minutes)</label>
-                <input type="number" name="duration" class="form-control"
-                       value="{{ class_info.duration }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold">Instructor</label>
-                <input type="text" class="form-control" value="{{ class_info.instructor.name }}" disabled>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold">Class Key</label>
-                <input type="text" class="form-control" value="{{ class_info.key }}" disabled>
-            </div>
-
-            <div class="text-end">
-                <button type="submit" class="btn btn-success">Save Changes</button>
-                <a href="{{ url_for('class_dashboard', class_id=class_info.id) }}" class="btn btn-secondary">Cancel</a>
-            </div>
-          <p><strong>Created at:</strong> {{ class_info.created_at_tbilisi.strftime('%Y-%m-%d %H:%M') }}</p>
-          <p><strong>Updated at:</strong> {{ class_info.updated_at_tbilisi.strftime('%Y-%m-%d %H:%M') }}</p>
-        </div>
-    </form>
+    <div class="text-end mt-3">
+      <a href="{{ url_for('edit_class', class_id=class_info.id) }}" class="btn btn-warning">✏️ Edit</a>
+    </div>
+  </div>
 </div>
+
 {% endblock %}
