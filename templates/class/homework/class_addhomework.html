@@ -7,7 +7,7 @@
   <form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
 
-    <!-- Name -->
+
     <div class="mb-3">
       {{ form.name.label(class="form-label fw-bold") }}
       {{ form.name(class="form-control") }}
@@ -17,13 +17,13 @@
 
     </div>
 
-    <!-- Text -->
+
     <div class="mb-3">
       {{ form.text.label(class="form-label fw-bold") }}
       {{ form.text(class="form-control", rows=4) }}
     </div>
 
-    <!-- File -->
+
     <div class="mb-3">
       {{ form.file.label(class="form-label fw-bold") }}
       {{ form.file(class="form-control") }}
@@ -32,7 +32,7 @@
 {% endif %}
     </div>
 
-    <!-- Deadline -->
+
     <div class="mb-3">
   {{ form.deadline.label(class="form-label fw-bold") }}
   {{ form.deadline(class="form-control", min="2024-01-01T00:00", max="2099-12-31T23:59", placeholder="YYYY-MM-DDTHH:MM") }}
@@ -42,7 +42,7 @@
   {% endif %}
 </div>
 
-    <!-- Submit -->
+
     <div class="text-end">
       {{ form.submit(class="btn btn-success") }}
     </div>

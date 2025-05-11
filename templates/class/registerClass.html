@@ -6,7 +6,7 @@
   <form method="POST">
     {{ form.hidden_tag() }}
 
-    <!-- Class Name -->
+
     <div class="mb-3">
       {{ form.name.label(class="form-label fw-bold") }}
       {{ form.name(class="form-control") }}
@@ -15,7 +15,7 @@
       {% endif %}
     </div>
 
-    <!-- Subject -->
+
     <div class="mb-3">
       {{ form.subject.label(class="form-label fw-bold") }}
       {{ form.subject(class="form-control") }}
@@ -24,7 +24,7 @@
       {% endif %}
     </div>
 
-    <!-- Day -->
+
     <div class="mb-3">
       {{ form.day.label(class="form-label fw-bold") }}
       {{ form.day(class="form-select") }}
@@ -33,7 +33,7 @@
       {% endif %}
     </div>
 
-    <!-- Start Time -->
+
     <div class="mb-3">
       <label class="form-label fw-bold">Start Time <span class="text-danger">*</span></label>
       <div class="d-flex gap-2">
@@ -48,7 +48,7 @@
       {% endif %}
     </div>
 
-    <!-- Duration -->
+
     <div class="mb-3">
       {{ form.duration.label(class="form-label fw-bold") }}
       {{ form.duration(class="form-control") }}
@@ -57,13 +57,13 @@
       {% endif %}
     </div>
 
-    <!-- Instructor Info (read-only) -->
+
     <div class="mb-3">
       <label class="form-label fw-bold">Instructor</label>
       <input type="text" class="form-control" value="{{ current_user.name }}" readonly>
     </div>
 
-    <!-- Submit -->
+
     <div class="text-end">
       {{ form.submit(class="btn btn-success") }}
     </div>

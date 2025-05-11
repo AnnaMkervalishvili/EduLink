@@ -9,7 +9,7 @@
 
     <div class="card p-4">
 
-      <!-- Class Name -->
+
       <div class="mb-3">
         {{ form.name.label(class="form-label fw-bold") }}
         {{ form.name(class="form-control") }}
@@ -19,7 +19,7 @@
         {% endif %}
       </div>
 
-      <!-- Subject -->
+
       <div class="mb-3">
         {{ form.subject.label(class="form-label fw-bold") }}
         {{ form.subject(class="form-control") }}
@@ -29,7 +29,7 @@
         {% endif %}
       </div>
 
-      <!-- Day -->
+
       <div class="mb-3">
         {{ form.day.label(class="form-label fw-bold") }}
         {{ form.day(class="form-select") }}
@@ -39,7 +39,7 @@
         {% endif %}
       </div>
 
-      <!-- Start Time -->
+
 <div class="mb-3">
   <label class="form-label fw-bold">Start Time</label>
   <div class="d-flex gap-2">
@@ -61,7 +61,7 @@
   {% endif %}
 </div>
 
-      <!-- Duration -->
+
       <div class="mb-3">
         {{ form.duration.label(class="form-label fw-bold") }}
         {{ form.duration(class="form-control") }}
@@ -71,19 +71,19 @@
         {% endif %}
       </div>
 
-      <!-- Instructor (read-only) -->
+
       <div class="mb-3">
         <label class="form-label fw-bold">Instructor</label>
         <input type="text" class="form-control" value="{{ class_info.instructor.name }}" disabled>
       </div>
 
-      <!-- Class Key (read-only) -->
+
       <div class="mb-3">
         <label class="form-label fw-bold">Class Key</label>
         <input type="text" class="form-control" value="{{ class_info.key }}" disabled>
       </div>
 
-      <!-- Submit Buttons -->
+
       <div class="text-end d-flex gap-2 justify-content-end mt-3">
         {{ form.submit(class="btn btn-success") }}
         <a href="{{ url_for('class_dashboard', class_id=class_info.id) }}" class="btn btn-secondary">Cancel</a>

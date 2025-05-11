@@ -22,25 +22,42 @@ Technologies that I used are:
   - SQLite from SQLAlchemy ORM
 - Frontend 
   - HTML : for creating templates
-  - Jinja - to dynamicly sent data to HTML
+  - Jinja - to dynamically sent data to HTML
   - CSS+Bootstrap - for responsive and elegant design
-  - Docker : to run file in containter
+  - Docker : to run file in container
      - Dockerfile: defines environment
-     - requirements.txt: to install all pythong requirements inside
+     - requirements.txt: to install all python requirements inside
 
 inside terminal type: docker build -t edulink and after building is finished type: docker run -p 5000:5000 edulink and you can run the website locally.
 
-Demo Credentials: 
- - Email: admin@gmail.com - Password: admin
-
-Demo Credentials:
+future updated
  -upload more than 1 file
  -create folders for uploading files
  -add class background pictures
  -sort materials by date or name
  -students full interface
  -divide routes into different files
+Not solved edge cases:
+- in curriculum, class time is not placed till end - only at the start. not duration
+- when users, or classes are deleted, folder names are not renumbered. eg. there were instructor folders with ids: 1,2,3; if first one is deleted, 2 and 3 will stay. it won't be changed to 1 and 2
+- email and phone is not confirmed 
+- there is no password confirmation or forgotten password
+
+
+
+How to run:
+clone the repository
+
+git clone https://github.com/AnnaMkervalishvili/EduLink.git
+cd EduLink
+docker build -t edulink .
+docker run -p 5000:5000 edulink
  
+
+
+
+
+
 
 
 

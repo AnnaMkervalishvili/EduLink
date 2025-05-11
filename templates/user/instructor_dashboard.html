@@ -5,12 +5,12 @@
 
     <h2 class="mb-4">Welcome, {{ name }} 👋</h2>
 
-    <!-- Search bar -->
+
     <div class="mb-4">
       <input type="text" class="form-control" placeholder="Search classes..." id="search-input">
     </div>
 
-    <!-- Class Cards Grid -->
+
     <div class="row g-4" id="class-container">
       {% for class_item in classes %}
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 class-card"> <!-- 🛠 added class-card -->
@@ -35,7 +35,7 @@
       {% endfor %}
     </div>
 
-    <!-- Add New Class Button -->
+
     <div class="d-flex justify-content-end mt-4">
       <a href="{{ url_for('register_class') }}" class="btn border border-secondary px-4 py-2" style="background-color: white; color: black; font-weight: 500;">
         <span style="color: #0d6efd; font-size: 24px; margin-right: 8px;">+</span> Add New Class
@@ -44,13 +44,13 @@
   </div>
 </div>
 
-<!-- Live Search + Delete Confirm Script -->
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const classCards = document.querySelectorAll(".class-card");
 
-    // 🔍 Search filter
+
     searchInput.addEventListener("input", function () {
       const searchTerm = this.value.toLowerCase();
 
@@ -61,7 +61,7 @@
       });
     });
 
-    // 🛑 Confirm before deleting class
+
     const deleteForms = document.querySelectorAll('.delete-form');
     deleteForms.forEach(form => {
       form.addEventListener('submit', function (e) {

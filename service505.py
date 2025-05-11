@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import  String
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
+import shutil
 import os
 import random
 import string
@@ -139,7 +140,7 @@ class EditProfileForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=50)])
     email = EmailField('Email', validators=[DataRequired(), Email()])
     phonenumber = StringField('Phone Number', validators=[Optional(), Length(min=9, max=9)])
-    profile_picture = FileField('Profile Picture', validators=[Optional(), FileAllowed(ALLOWED_EXTENSIONS)])
+    profile_picture = FileField('Profile Picture', validators=[Optional(), FileAllowed({'png', 'jpg'})])
     submit = SubmitField('Update Profile')
 
 class RegisterClassForm(FlaskForm):
@@ -335,17 +336,17 @@ def curriculum():
 def delete_instructor():
     instructor_id = current_user.id
 
-    # Get all classes by the instructor
+
     classes = Class.query.filter_by(instructor_id=instructor_id).all()
 
-    # Delete each class using same logic as /delete_class
+
     for cls in classes:
         delete_class(cls)
     instructor_folder = os.path.join(app.root_path, 'static/uploads/instructors', str(instructor_id))
     if os.path.exists(instructor_folder):
-        import shutil
+
         shutil.rmtree(instructor_folder)
-    # Finally, delete user
+
     db.session.delete(current_user)
     db.session.commit()
 
@@ -614,7 +615,7 @@ def edit_material(material_id):
 
             file_path = os.path.join(materials_dir, filename)
 
-            # ✅ Delete old file from same folder
+
             if material.filename:
                 old_file = os.path.join(materials_dir, material.filename)
                 delete_file_if_exists(old_file)
@@ -751,7 +752,7 @@ def edit_announcement(announcement_id):
             announcement.name = new_name
             change = True
 
-        # If text changed
+
         if new_text != announcement.text:
             announcement.text = new_text
             change = True
@@ -876,7 +877,7 @@ def edit_homework(homework_id):
             ext = file.filename.rsplit('.', 1)[1].lower()
             filename = f"{uuid.uuid4()}.{ext}"
 
-            # ✅ Define new structured homework path
+
             homework_dir = os.path.join(
                 app.root_path, 'static/uploads/instructors',
                 str(current_user.id), 'classes',
@@ -886,7 +887,7 @@ def edit_homework(homework_id):
 
             file_path = os.path.join(homework_dir, filename)
 
-            # ✅ Delete old file from same folder
+
             if homework.filename:
                 old_path = os.path.join(homework_dir, homework.filename)
                 delete_file_if_exists(old_path)
