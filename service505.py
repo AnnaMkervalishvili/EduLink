@@ -2,9 +2,10 @@
 
 from flask import Flask, render_template, request, url_for, redirect, flash, send_from_directory
 from flask_wtf.file import FileAllowed, FileField
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String
+from sqlalchemy import  String
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 import os
 import random
@@ -19,7 +20,7 @@ from wtforms.fields.choices import RadioField
 from wtforms.fields.datetime import DateTimeLocalField
 from wtforms.fields.numeric import IntegerField
 from wtforms.fields.simple import EmailField, TextAreaField
-from wtforms.validators import DataRequired, Email, Length, Optional, NumberRange
+from wtforms.validators import DataRequired, Email, Length, Optional, NumberRange, InputRequired
 
 app = Flask(__name__, template_folder='templates')
 app.config['SECRET_KEY'] = 'Alohomora'
@@ -79,7 +80,7 @@ class Material(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     text = db.Column(db.Text, nullable=True)
-    filename = db.Column(db.String(255), nullable=False)
+    filename = db.Column(db.String(255), nullable=True)
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
@@ -153,9 +154,16 @@ class RegisterClassForm(FlaskForm):
             ('Saturday', 'Saturday'),
             ('Sunday', 'Sunday')
         ], validators=[DataRequired()])
-        start_hour = IntegerField('Start Hour (0–23)', validators=[DataRequired(), NumberRange(min=0, max=23)])
-        start_minute = IntegerField('Start Minute (0–59)', validators=[DataRequired(), NumberRange(min=0, max=59)])
-        duration = IntegerField('Duration (minutes)', validators=[DataRequired(), NumberRange(min=10, max=300)])
+        start_hour = IntegerField('Start Hour', validators=[
+            InputRequired(), NumberRange(min=8, max=20, message="Hour must be between 8 and 20")
+        ])
+        start_minute = IntegerField('Start Minute', validators=[
+            InputRequired(), NumberRange(min=0, max=59, message="Minute must be between 0 and 59")
+        ])
+
+        duration = IntegerField('Duration (minutes)', validators=[
+            InputRequired(), NumberRange(min=1, message="Duration must be at least 1 minute")
+        ])
         submit = SubmitField('Register Class')
 class AddMaterialForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
@@ -288,7 +296,7 @@ def about_instructor():
             change = True
 
         if change:
-            user.updated_at = datetime.now()
+            user.updated_at = func.now()
             db.session.commit()
             flash('Profile updated successfully!', 'success')
         else:
@@ -333,7 +341,10 @@ def delete_instructor():
     # Delete each class using same logic as /delete_class
     for cls in classes:
         delete_class(cls)
-
+    instructor_folder = os.path.join(app.root_path, 'static/uploads/instructors', str(instructor_id))
+    if os.path.exists(instructor_folder):
+        import shutil
+        shutil.rmtree(instructor_folder)
     # Finally, delete user
     db.session.delete(current_user)
     db.session.commit()
@@ -444,7 +455,7 @@ def edit_class(class_id):
         base_name = form.name.data
         new_name = base_name
         counter = 2
-        while Class.query.filter_by(instructor_id=current_user.id, name=new_name).first():
+        while any(c.name==new_name for c in existing_classes):
             new_name = f"{base_name} ({counter})"
             counter += 1
         if new_name != base_name:
@@ -512,6 +523,7 @@ def addmaterials(class_id):
         name = form.name.data
         text = form.text.data
         file = form.file.data
+        filename=None
         existing = Material.query.filter_by(class_id=class_info.id, name=name).first()
         if existing:
             flash(f'A material named "{name}" already exists in this class.', "danger")
@@ -528,21 +540,25 @@ def addmaterials(class_id):
 
             file_path = os.path.join(materials_path, filename)
             file.save(file_path)
+        elif file and not allowed_file(file.filename):
 
-            material = Material(
+            flash('Invalid file format.', 'danger')
+            return redirect(request.url)
+
+        material = Material(
                 name=name,
                 text=text,
                 filename=filename,
                 class_id=class_info.id
             )
-            db.session.add(material)
-            db.session.commit()
+        db.session.add(material)
+        db.session.commit()
 
-            flash('Material uploaded successfully!', 'success')
-            return redirect(url_for('materials', class_id=class_info.id))
+        flash('Material uploaded successfully!', 'success')
+        return redirect(url_for('materials', class_id=class_info.id))
 
-        flash('Invalid file format.', 'danger')
-        return redirect(request.url)
+
+
 
     return render_template('class/material/class_addmaterial.html', class_info=class_info, form=form)
 @app.route('/material/<int:material_id>')
@@ -713,42 +729,49 @@ def delete_announcement(announcement_id):
 @login_required
 def edit_announcement(announcement_id):
     announcement = Announcement.query.get_or_404(announcement_id)
-    class_info=announcement.class_info
+    class_info = announcement.class_info
     form = AddAnnouncementForm(obj=announcement)
 
     if form.validate_on_submit():
-        new_name = form.name.data
+        new_name = form.name.data.strip()
         new_text = form.text.data
+        change = False
 
-        if new_name != announcement.name or new_text != announcement.text:
-           if  new_name != announcement.name :
-                new_name = form.name.data.strip()
-                existing = Announcement.query.filter(
-                    Announcement.class_id == announcement.class_id,
-                    Announcement.name == new_name,
-                    Announcement.id != announcement.id
-                ).first()
+        # If name changed, check for duplicates
+        if new_name != announcement.name:
+            existing = Announcement.query.filter(
+                Announcement.class_id == announcement.class_id,
+                Announcement.name == new_name,
+                Announcement.id != announcement.id
+            ).first()
+            if existing:
+                flash(f'An announcement named "{new_name}" already exists in this class.', "danger")
+                return redirect(url_for('view_announcement', announcement_id=announcement_id))
 
-                if existing:
-                 flash(f'A announcement named "{new_name}" already exists in this class.', "danger")
-                 return redirect(url_for('view_announcement', announcement_id=announcement_id))
+            announcement.name = new_name
+            change = True
 
-           announcement.name = new_name
+        # If text changed
+        if new_text != announcement.text:
+            announcement.text = new_text
+            change = True
 
-           announcement.text = new_text
-           announcement.updated_at = func.now()
-           db.session.commit()
-           flash("Announcement updated successfully.", "success")
-    else:
-           flash("No changes made.", "info")
+        if change:
+            announcement.updated_at = func.now()
+            db.session.commit()
+            flash("Announcement updated successfully.", "success")
+        else:
+            flash("No changes made.", "info")
 
-
+        return redirect(url_for('view_announcement', announcement_id=announcement.id))
 
     return render_template(
         'class/announcements/class_editannouncement.html',
         form=form,
-        announcement=announcement, class_info=class_info
+        announcement=announcement,
+        class_info=class_info
     )
+
 
 #   ____________________Homework____________________
 
