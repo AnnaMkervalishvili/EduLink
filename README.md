@@ -37,11 +37,17 @@ future updated
  -sort materials by date or name
  -students full interface
  -divide routes into different files
+ - add function to hide class, or show it at exact date
+ - 
 Not solved edge cases:
 - in curriculum, class time is not placed till end - only at the start. not duration
-- when users, or classes are deleted, folder names are not renumbered. eg. there were instructor folders with ids: 1,2,3; if first one is deleted, 2 and 3 will stay. it won't be changed to 1 and 2
+- when users, or classes are deleted, folder names are not renumbered. eg. there were instructor folders with ids: 1,2,3; if first one is deleted, 2 and 3 will stay. it won't be changed to 1 and 2, and new will be added as 4
 - email and phone is not confirmed 
 - there is no password confirmation or forgotten password
+- not edge case but id should be string
+- if written 2 oclock app doesnt identify it as 14:00 automatically
+- when writing deadline, from month to year, cursor is not automatically moved 
+
 
 
 

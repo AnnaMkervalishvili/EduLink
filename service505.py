@@ -1,8 +1,6 @@
 
-
 from flask import Flask, render_template, request, url_for, redirect, flash, send_from_directory
 from flask_wtf.file import FileAllowed, FileField
-
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import  String
@@ -181,7 +179,7 @@ class AddAnnouncementForm(FlaskForm):
 class AddHomeworkForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     text = TextAreaField('Text', validators=[Optional()])
-    file = FileField('Upload File', validators=[Optional(), FileAllowed(['pdf', 'docx', 'pptx'])])
+    file = FileField('Upload File', validators=[Optional(), FileAllowed(ALLOWED_EXTENSIONS)])
     deadline = DateTimeLocalField('Deadline', validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
     submit = SubmitField('✅ Done')
 #   ____________________ AUTH____________________
@@ -313,19 +311,13 @@ def curriculum():
 
     today = datetime.today()
 
-    start_of_week = datetime.combine((today - timedelta(days=today.weekday())).date(), datetime.min.time())
-
-    end_of_week = datetime.combine((start_of_week + timedelta(days=6)).date(), datetime.max.time())
-
 
     classes = Class.query.filter_by(instructor_id=current_user.id).all()
-
-
 
     schedule = {i: {'classes': []} for i in range(7)}
     for c in classes:
         weekday = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].index(c.day)
-        c.end_time = (datetime.combine(datetime.today(), c.start_time) + timedelta(minutes=c.duration)).time()
+        c.end_time = (datetime.combine(today, c.start_time) + timedelta(minutes=c.duration)).time()
         schedule[weekday]['classes'].append(c)
 
 
@@ -420,10 +412,6 @@ def register_class():
 def edit_class(class_id):
     class_info = Class.query.get_or_404(class_id)
 
-    if class_info.instructor_id != current_user.id:
-        flash("You can't edit someone else's class.", "danger")
-        return redirect(url_for('class_dashboard', class_id=class_id))
-
     form = RegisterClassForm(obj=class_info)
 
     form.submit.label.text = "Save"
@@ -477,9 +465,10 @@ def edit_class(class_id):
         class_info.day = new_day
         class_info.start_time = new_start_time
         class_info.duration = new_duration
-        class_info.updated_ad=func.now()
+        class_info.updated_at=func.now()
         db.session.commit()
         flash("Class updated successfully.", "success")
+
         return redirect(url_for('class_dashboard', class_id=class_id))
 
     return render_template('class/class_editabout.html', form=form, class_info=class_info, to_tbilisi=to_tbilisi)
@@ -494,10 +483,6 @@ def class_dashboard(class_id):
 @login_required
 def delete_class(class_id):
     class_to_delete = Class.query.get_or_404(class_id)
-
-    if class_to_delete.instructor_id != current_user.id:
-        flash("You are not authorized to delete this class.", "danger")
-        return redirect(url_for('instructor'))
 
     delete_class(class_to_delete)
     db.session.commit()
@@ -574,9 +559,6 @@ def view_material(material_id):
 def edit_material(material_id):
     material = Material.query.get_or_404(material_id)
 
-    if material.class_info.instructor_id != current_user.id:
-        flash("You can’t edit material from another instructor’s class.", "danger")
-        return redirect(url_for('materials', class_id=material.class_id))
 
     form = AddMaterialForm(obj=material)
 
@@ -640,9 +622,6 @@ def delete_material(material_id):
     material = Material.query.get_or_404(material_id)
     class_info = material.class_info
 
-    if class_info.instructor_id != current_user.id:
-        flash("You are not authorized to delete this material.", "danger")
-        return redirect(url_for('materials', class_id=class_info.id))
 
     delete_material(material)
     db.session.commit()
@@ -653,11 +632,6 @@ def delete_material(material_id):
 @app.route('/download/<int:class_id>/materials/<filename>')
 @login_required
 def download_material(class_id, filename):
-    class_info = Class.query.get_or_404(class_id)
-
-    if class_info.instructor_id != current_user.id:
-        flash("You are not authorized to download this file.", "danger")
-        return redirect(url_for('materials', class_id=class_id))
 
     folder = os.path.join(
         app.root_path, 'static/uploads/instructors',
@@ -717,9 +691,6 @@ def delete_announcement(announcement_id):
     announcement = Announcement.query.get_or_404(announcement_id)
     class_info = announcement.class_info
 
-    if class_info.instructor_id != current_user.id:
-        flash("You are not authorized to delete this announcement.", "danger")
-        return redirect(url_for('announcements', class_id=class_info.id))
 
     delete_announcement(announcement)
     db.session.commit()
@@ -738,7 +709,7 @@ def edit_announcement(announcement_id):
         new_text = form.text.data
         change = False
 
-        # If name changed, check for duplicates
+
         if new_name != announcement.name:
             existing = Announcement.query.filter(
                 Announcement.class_id == announcement.class_id,
@@ -922,9 +893,7 @@ def delete_homework(homework_id):
     homework = Homework.query.get_or_404(homework_id)
     class_info = homework.class_info
 
-    if class_info.instructor_id != current_user.id:
-        flash("You are not authorized to delete this homework.", "danger")
-        return redirect(url_for('homeworks', class_id=class_info.id))
+
 
     delete_homework(homework)
     db.session.commit()
@@ -938,9 +907,7 @@ def delete_homework(homework_id):
 def download_homework(class_id, filename):
     class_info = Class.query.get_or_404(class_id)
 
-    if class_info.instructor_id != current_user.id:
-        flash("You are not authorized to download this file.", "danger")
-        return redirect(url_for('homeworks', class_id=class_id))
+
 
     folder = os.path.join(
         app.root_path, 'static/uploads/instructors',

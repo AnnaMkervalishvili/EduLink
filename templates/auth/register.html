@@ -4,7 +4,8 @@
 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registration</h3>
 
 <form method="POST" action="{{ url_for('register') }}">
-  {{ form.hidden_tag() }}
+  {{ form.hidden_tag() }}  <!-- to protect site from hackers, token is generated per session, like a unique code,  -->
+
 
   <div class="row">
     <div class="col-md-6 mb-4">
@@ -31,7 +32,7 @@
   <div class="row">
     <div class="col-md-6 mb-4 d-flex align-items-center">
       <div data-mdb-input-init class="form-outline">
-        {{ form.phonenumber(class="form-control form-control-lg", id="phoneNumber", placeholder="(+995)", inputmode="numeric") }}
+        {{ form.phonenumber(class="form-control form-control-lg", id="phoneNumber", placeholder="551623753", inputmode="numeric") }}
         {{ form.phonenumber.label(class="form-label", for="phoneNumber") }}
         {% if form.phonenumber.errors %}
           <div class="text-danger">{{ form.phonenumber.errors[0] }}</div>
@@ -39,18 +40,18 @@
       </div>
     </div>
 
-    <div class="col-md-6 mb-4">
-      <h6 class="mb-2 pb-1">Gender:</h6>
-      {% for subfield in form.gender %}
-        <div class="form-check form-check-inline">
-          {{ subfield(class="form-check-input", id=subfield.id) }}
-          <label class="form-check-label" for="{{ subfield.id }}">{{ subfield.label.text }}</label>
-        </div>
-      {% endfor %}
-      {% if form.gender.errors %}
-        <div class="text-danger">{{ form.gender.errors[0] }}</div>
-      {% endif %}
+   <div class="col-md-6 mb-4">
+  <h6 class="mb-2 pb-1">Gender:</h6>
+  {% for subfield in form.gender %}
+    <div class="form-check form-check-inline">
+      {{ subfield(class="form-check-input") }}
+      {{ subfield.label(class="form-check-label") }}
     </div>
+  {% endfor %}
+  {% if form.gender.errors %}
+    <div class="text-danger">{{ form.gender.errors[0] }}</div>
+  {% endif %}
+</div>
   </div>
 
   <div class="row">

@@ -47,8 +47,7 @@
         <div class="input-group">
           {{ form.phonenumber(
             class="form-control",
-            placeholder="(+995)",
-            onfocus="clearPrefix(this)",
+            placeholder="557443976",
             pattern="\\d{9}",
             maxlength="9",
             inputmode="numeric"
@@ -72,11 +71,5 @@
   </div>
 </div>
 
-<script>
-  function clearPrefix(input) {
-    if (input.value === '+995' || input.value === '') {
-      input.value = '';
-    }
-  }
-</script>
+
 {% endblock %}
