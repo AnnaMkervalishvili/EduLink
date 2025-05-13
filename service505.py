@@ -311,7 +311,6 @@ def curriculum():
 
     today = datetime.today()
 
-
     classes = Class.query.filter_by(instructor_id=current_user.id).all()
 
     schedule = {i: {'classes': []} for i in range(7)}
@@ -439,7 +438,7 @@ def edit_class(class_id):
             class_end = (datetime.combine(datetime.today(), class_start) + timedelta(minutes=c.duration)).time()
             if not (new_end_time <= class_start or new_start_time >= class_end):
                 flash("This class time overlaps with another class you're teaching on the same day.", "danger")
-                return redirect(url_for('edit_class'))
+                return redirect(url_for('edit_class',class_id=class_id ))
 
         base_name = form.name.data
         new_name = base_name
