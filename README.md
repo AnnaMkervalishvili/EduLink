@@ -38,7 +38,7 @@ future updated
  -students full interface
  -divide routes into different files
  - add function to hide class, or show it at exact date
- - 
+ - class can be conducted only once a week (no feature for adding different time)
 Not solved edge cases:
 - in curriculum, class time is not placed till end - only at the start. not duration
 - when users, or classes are deleted, folder names are not renumbered. eg. there were instructor folders with ids: 1,2,3; if first one is deleted, 2 and 3 will stay. it won't be changed to 1 and 2, and new will be added as 4
